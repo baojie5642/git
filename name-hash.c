@@ -118,8 +118,15 @@ static int cache_entry_cmp(const struct cache_entry *ce1,
 	return remove ? !(ce1 == ce2) : 0;
 }
 
+static int lazy_try_threaded = 1;
+static int lazy_nr_dir_threads = 0;
 
 #ifdef NO_PTHREADS
+
+static void threaded_lazy_init_name_hash(struct index_state *istate)
+{
+	; /* nothing */
+}
 
 static int lookup_lazy_params(struct index_state *istate)
 {
@@ -153,8 +160,6 @@ static int lookup_lazy_params(struct index_state *istate)
  */
 #define LAZY_MAX_MUTEX   (32)
 
-static int lazy_try_threaded = 1;
-static int lazy_nr_dir_threads = 0;
 static pthread_mutex_t *lazy_dir_mutex_array;
 
 /*
